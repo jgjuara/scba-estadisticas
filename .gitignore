@@ -1,4 +1,43 @@
-pdfs/*.pdf
-csv/*.csv
-parquet/*.parquet
-xlsx/*.xlsx
+node_modules
+.venv/
+
+# Config & environment
+extensions.json
+settings.json
+.npmrc
+.python-version
+__pycache__/
+*.pyc
+
+# Allow lock files for reproducible builds in GitHub Actions
+!uv.lock
+!package-lock.json
+
+# Exclude large local data and build/cache folders
+pdfs/
+csv/
+parquet/
+xlsx/
+.output/
+.vercel/
+.netlify/
+.wrangler/
+/.svelte-kit/
+/build/
+
+# Prevent ignoring frontend data
+!static/data/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Env files
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite temp files
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*

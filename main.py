@@ -41,7 +41,8 @@ def main() -> None:
         "extract_juzgados_civiles.py",
         "extract_tribunales_trabajo.py",
         "export_all_to_csv.py",
-        "unify_data.py"
+        "unify_data.py",
+        "export_parquet_to_csv.py"
     ]
 
     # Determinar qué argumentos propagar a cada paso
@@ -59,7 +60,8 @@ def main() -> None:
 
     try:
         for step in pipeline_steps:
-            run_pipeline_step(step, sub_args)
+            step_args = [] if step == "export_parquet_to_csv.py" else sub_args
+            run_pipeline_step(step, step_args)
         print("Data pipeline executed successfully from end to end.")
     except subprocess.CalledProcessError as exc:
         print(f"Pipeline failed at step {exc.cmd[1]} with exit code {exc.returncode}.", file=sys.stderr)

@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Lora', Georgia, serif;
+  
+  --color-brand-bg: #F8F6F1;
+  --color-brand-card: #ffffff;
+  --color-brand-card-hover: #fcfbfa;
+  --color-brand-border: #dfded9;
+  --color-brand-indigo: #4338ca;
+  --color-brand-indigo-hover: #312e81;
+  --color-brand-success: #0f5132;
+  --color-brand-warning: #78350f;
+  --color-brand-danger: #991b1b;
+  --color-brand-muted: #57534e;
+  --color-brand-text: #1f242e;
+  --color-brand-text-muted: #454f5a;
+}
+
+/* Custom global styles */
+body {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  line-height: 1.6;
+  background-color: var(--color-brand-bg);
+  color: var(--color-brand-text);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Limit line length of reading paragraphs for high legibility */
+p {
+  max-width: 65ch;
+  line-height: 1.6;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-brand-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-brand-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-indigo);
+}
+
+/* Glassmorphism utility classes adapted for light theme */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-brand-border);
+}
+
+.glass-panel-interactive {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-brand-border);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-panel-interactive:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(67, 56, 202, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -10px rgba(67, 56, 202, 0.1);
+}

@@ -1,0 +1,49 @@
+name: Data Pipeline Execution
+
+on:
+  schedule:
+    # Se ejecuta todos los años el 15 de junio a las 00:00 UTC
+    - cron: '0 0 15 6 *'
+  workflow_dispatch:
+    inputs:
+      pipeline_args:
+        description: 'Argumentos para main.py (ej: --all o --year 2025)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Setup Python
+        run: uv python install
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run data pipeline
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ github.event.inputs.pipeline_args }}" ]; then
+            uv run main.py ${{ github.event.inputs.pipeline_args }}
+          else
+            uv run main.py
+          fi
+
+      - name: Commit and push updated data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "data: automatic annual update of judicial statistics"
+          file_pattern: "static/data/*"
+          skip_fetch: false
+          skip_checkout: true
