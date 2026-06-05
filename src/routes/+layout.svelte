@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { base } from '$app/paths';
 	import { loadDataset, db } from '$lib/data/loader.svelte';
-	import { LayoutDashboard, Building2, Scale, Loader2, AlertCircle, FileText } from '@lucide/svelte';
+	import { LayoutDashboard, Building2, Loader2, AlertCircle, FileText } from '@lucide/svelte';
 	import './layout.css';
 
 	let { children } = $props();
@@ -23,8 +23,7 @@
 	const navItems = [
 		{ path: '/', label: 'Provincia', icon: LayoutDashboard },
 		{ path: '/sedes', label: 'Sedes', icon: Building2 },
-		{ path: '/sede', label: 'Detalle x Sede', icon: FileText },
-		{ path: '/comparador', label: 'Comparador', icon: Scale }
+		{ path: '/sede', label: 'Detalle x Sede', icon: FileText }
 	];
 </script>
 
