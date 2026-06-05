@@ -138,7 +138,7 @@
 		class="border-t border-brand-border py-6 bg-stone-200/20 text-center text-[10px] text-brand-text-muted font-sans"
 	>
 		<div class="max-w-7xl mx-auto px-4">
-			<p>© 2026 - Juan Gabriel Juara en base a datos de la SCBA</p>
+			<p>© 2026 - <a href="https://www.linkedin.com/in/jgjuara/" target="_blank" rel="noopener noreferrer" class="hover:underline text-brand-indigo font-medium">Juan Gabriel Juara</a> en base a datos de la SCBA</p>
 			<p class="mt-1">
 				Herramienta descriptiva y exploratoria de flujos procesales.
 				Fuente de datos: Parquet/CSV SCBA.
