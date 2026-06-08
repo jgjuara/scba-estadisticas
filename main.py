@@ -42,6 +42,7 @@ def main() -> None:
         "extract_tribunales_trabajo.py",
         "export_all_to_csv.py",
         "unify_data.py",
+        "aggregate_data.py",
         "export_parquet_to_csv.py"
     ]
 
@@ -60,7 +61,7 @@ def main() -> None:
 
     try:
         for step in pipeline_steps:
-            step_args = [] if step == "export_parquet_to_csv.py" else sub_args
+            step_args = [] if step in ("export_parquet_to_csv.py", "aggregate_data.py") else sub_args
             run_pipeline_step(step, step_args)
         print("Data pipeline executed successfully from end to end.")
     except subprocess.CalledProcessError as exc:

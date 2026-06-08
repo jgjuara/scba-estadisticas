@@ -192,7 +192,7 @@
 				<Building2 class="w-6 h-6" />
 			</div>
 			<div>
-				<h2 class="text-2xl font-bold text-brand-text tracking-tight">Detalle por Sede Judicial</h2>
+				<h2 class="text-2xl font-bold text-brand-text tracking-tight">Detalle por Sede Judicial - Civil y Comercial</h2>
 				<p class="text-xs text-brand-text-muted mt-1">
 					Historial y comparativa detallada de rendimiento procesal por sede.
 				</p>
@@ -233,7 +233,7 @@
 			</div>
 			<h3 class="text-base font-bold text-brand-text">Sede no encontrada</h3>
 			<p class="text-xs text-brand-text-muted mt-2 max-w-sm">
-				La sede "{selectedSede}" no se encuentra en el registro actual de tribunales de trabajo.
+				La sede "{selectedSede}" no se encuentra en el registro actual de juzgados civiles y comerciales.
 			</p>
 		</div>
 	{:else}

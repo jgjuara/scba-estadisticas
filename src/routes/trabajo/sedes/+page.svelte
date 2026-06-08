@@ -230,7 +230,7 @@
 							{#each rankResolucion.top as item, i}
 								<div class="flex items-center justify-between text-xs py-1 px-2 rounded-lg bg-white border border-brand-border">
 									<span class="truncate max-w-[130px] text-brand-text-muted">
-										<a href="{base}/sede?id={encodeURIComponent(item.id)}" class="hover:text-brand-indigo transition font-medium font-sans">
+										<a href="{base}/trabajo/sede?id={encodeURIComponent(item.id)}" class="hover:text-brand-indigo transition font-medium font-sans">
 											{i + 1}. {item.name}
 										</a>
 									</span>
@@ -247,7 +247,7 @@
 							{#each rankResolucion.bottom as item, i}
 								<div class="flex items-center justify-between text-xs py-1 px-2 rounded-lg bg-white border border-brand-border">
 									<span class="truncate max-w-[130px] text-brand-text-muted">
-										<a href="{base}/sede?id={encodeURIComponent(item.id)}" class="hover:text-brand-indigo transition font-medium font-sans">
+										<a href="{base}/trabajo/sede?id={encodeURIComponent(item.id)}" class="hover:text-brand-indigo transition font-medium font-sans">
 											{i + 1}. {item.name}
 										</a>
 									</span>
@@ -274,7 +274,7 @@
 							{#each rankSentencia.top as item, i}
 								<div class="flex items-center justify-between text-xs py-1 px-2 rounded-lg bg-white border border-brand-border">
 									<span class="truncate max-w-[130px] text-brand-text-muted">
-										<a href="{base}/sede?id={encodeURIComponent(item.id)}" class="hover:text-brand-indigo transition font-medium font-sans">
+										<a href="{base}/trabajo/sede?id={encodeURIComponent(item.id)}" class="hover:text-brand-indigo transition font-medium font-sans">
 											{i + 1}. {item.name}
 										</a>
 									</span>
@@ -291,7 +291,7 @@
 							{#each rankSentencia.bottom as item, i}
 								<div class="flex items-center justify-between text-xs py-1 px-2 rounded-lg bg-white border border-brand-border">
 									<span class="truncate max-w-[130px] text-brand-text-muted">
-										<a href="{base}/sede?id={encodeURIComponent(item.id)}" class="hover:text-brand-indigo transition font-medium font-sans">
+										<a href="{base}/trabajo/sede?id={encodeURIComponent(item.id)}" class="hover:text-brand-indigo transition font-medium font-sans">
 											{i + 1}. {item.name}
 										</a>
 									</span>
@@ -318,7 +318,7 @@
 							{#each rankCaducidad.top as item, i}
 								<div class="flex items-center justify-between text-xs py-1 px-2 rounded-lg bg-white border border-brand-danger/20 border-dashed">
 									<span class="truncate max-w-[130px] text-brand-text-muted">
-										<a href="{base}/sede?id={encodeURIComponent(item.id)}" class="hover:text-brand-indigo transition font-medium font-sans">
+										<a href="{base}/trabajo/sede?id={encodeURIComponent(item.id)}" class="hover:text-brand-indigo transition font-medium font-sans">
 											{i + 1}. {item.name}
 										</a>
 									</span>
@@ -335,7 +335,7 @@
 							{#each rankCaducidad.bottom as item, i}
 								<div class="flex items-center justify-between text-xs py-1 px-2 rounded-lg bg-white border border-brand-success/20 border-dashed">
 									<span class="truncate max-w-[130px] text-brand-text-muted">
-										<a href="{base}/sede?id={encodeURIComponent(item.id)}" class="hover:text-brand-indigo transition font-medium font-sans">
+										<a href="{base}/trabajo/sede?id={encodeURIComponent(item.id)}" class="hover:text-brand-indigo transition font-medium font-sans">
 											{i + 1}. {item.name}
 										</a>
 									</span>

@@ -1,36 +1,85 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-	import { page } from "$app/stores";
+	import { untrack } from "svelte";
+	import { page } from "$app/stores"; // SvelteKit store page
 	import { base } from "$app/paths";
-	import { loadDataset, db } from "$lib/data/loader.svelte";
+	import { goto } from "$app/navigation";
+	import { loadDataset, loadConsolidatedDataset, db } from "$lib/data/loader.svelte";
 	import {
 		LayoutDashboard,
 		Building2,
 		Loader2,
 		AlertCircle,
 		FileText,
+		Home,
 	} from "@lucide/svelte";
 	import "./layout.css";
 
 	let { children } = $props();
 
-	onMount(() => {
-		loadDataset();
+	// Reactive derivation of the active fuero from the pathname
+	const currentFuero = $derived.by(() => {
+		const pathname = $page.url.pathname;
+		// Clean pathname comparisons accounting for potential trailing slashes and base path
+		const relativePath = base ? pathname.substring(base.length) : pathname;
+		if (relativePath.startsWith('/trabajo')) {
+			return 'trabajo';
+		}
+		if (relativePath.startsWith('/civil')) {
+			return 'civil';
+		}
+		return null;
+	});
+
+	const isConsolidado = $derived.by(() => {
+		const pathname = $page.url.pathname;
+		const relativePath = base ? pathname.substring(base.length) : pathname;
+		return relativePath.startsWith('/consolidado');
+	});
+
+	const isHome = $derived.by(() => {
+		const pathname = $page.url.pathname;
+		const relativePath = base ? pathname.substring(base.length) : pathname;
+		return relativePath === '/' || relativePath === '';
+	});
+
+	// Trigger dataset loading reactively when the fuero changes
+	$effect(() => {
+		if (currentFuero === 'trabajo') {
+			untrack(() => loadDataset('trabajo'));
+		} else if (currentFuero === 'civil') {
+			untrack(() => loadDataset('civil'));
+		} else if (isConsolidado || isHome) {
+			untrack(() => loadConsolidatedDataset());
+		} else {
+			db.loading = false;
+		}
 	});
 
 	// Helper to check active route
 	const activePath = $derived($page.url.pathname);
 
 	function isRouteActive(itemPath: string, currentPath: string): boolean {
-		const target = itemPath === "/" ? base || "/" : base + itemPath;
+		const target = base + itemPath;
 		return currentPath === target || currentPath === target + "/";
 	}
 
-	const navItems = [
-		{ path: "/", label: "Provincia", icon: LayoutDashboard },
-		{ path: "/sedes", label: "Sedes", icon: Building2 },
-		{ path: "/sede", label: "Detalle x Sede", icon: FileText },
-	];
+	const navItems = $derived(
+		currentFuero
+			? [
+					{ path: `/${currentFuero}`, label: "Provincia", icon: LayoutDashboard },
+					{ path: `/${currentFuero}/sedes`, label: "Sedes", icon: Building2 },
+					{ path: `/${currentFuero}/sede`, label: "Detalle x Sede", icon: FileText },
+				]
+			: []
+	);
+
+	function resetFuero() {
+		db.selectedFuero = null;
+		if (typeof window !== 'undefined') {
+			localStorage.removeItem('selectedFuero');
+		}
+		goto(`${base}/`);
+	}
 </script>
 
 <div class="min-h-screen flex flex-col bg-brand-bg text-brand-text">
@@ -51,35 +100,56 @@
 						<h1
 							class="text-sm font-bold tracking-tight text-brand-text leading-none"
 						>
-							Estadísticas de los Tribunales de Trabajo - SCBA
+							{#if currentFuero === 'civil'}
+								Estadísticas de los Juzgados en lo Civil y Comercial - SCBA
+							{:else if currentFuero === 'trabajo'}
+								Estadísticas de los Tribunales de Trabajo - SCBA
+							{:else if isConsolidado}
+								Estadísticas Consolidadas (Civil y Trabajo) - SCBA
+							{:else}
+								Estadísticas Judiciales - SCBA
+							{/if}
 						</h1>
 					</div>
 				</div>
 
 				<!-- Navigation -->
-				<nav class="hidden md:flex space-x-1">
-					{#each navItems as item}
-						{@const Icon = item.icon}
-						<a
-							href="{base}{item.path}"
-							class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold tracking-wide transition {isRouteActive(
-								item.path,
-								activePath,
-							)
-								? 'bg-brand-indigo/10 text-brand-indigo border border-brand-indigo/20'
-								: 'text-brand-text-muted hover:text-brand-text border border-transparent'}"
-						>
-							<Icon class="w-4 h-4" />
-							{item.label}
-						</a>
-					{/each}
-				</nav>
+				{#if currentFuero}
+					<nav class="hidden md:flex space-x-1">
+						{#each navItems as item}
+							{@const Icon = item.icon}
+							<a
+								href="{base}{item.path}"
+								class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold tracking-wide transition {isRouteActive(
+									item.path,
+									activePath,
+								)
+									? 'bg-brand-indigo/10 text-brand-indigo border border-brand-indigo/20'
+									: 'text-brand-text-muted hover:text-brand-text border border-transparent'}"
+							>
+								<Icon class="w-4 h-4" />
+								{item.label}
+							</a>
+						{/each}
+					</nav>
+				{/if}
 
-				<!-- Small Badge -->
-				<div
-					class="hidden sm:block text-[10px] bg-white border border-brand-border px-3 py-1 rounded-full text-brand-text-muted font-mono uppercase tracking-wider"
-				>
-					Datos 2017-2025
+				<!-- Header Actions / Reset Button -->
+				<div class="flex items-center gap-3">
+					{#if currentFuero || isConsolidado}
+						<button
+							onclick={resetFuero}
+							class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-brand-danger bg-brand-danger/10 border border-brand-danger/20 hover:bg-brand-danger/20 transition cursor-pointer"
+						>
+							<Home class="w-3.5 h-3.5" />
+							Volver al menú inicial
+						</button>
+					{/if}
+					<div
+						class="hidden sm:block text-[10px] bg-white border border-brand-border px-3 py-1 rounded-full text-brand-text-muted font-mono uppercase tracking-wider"
+					>
+						Datos 2017-2025
+					</div>
 				</div>
 			</div>
 		</div>
@@ -101,7 +171,13 @@
 					Cargando base de datos
 				</h3>
 				<p class="text-xs text-brand-text-muted mt-1">
-					Parseando registros históricos de tribunales de trabajo...
+					{#if currentFuero === 'civil'}
+						Parseando registros históricos de juzgados civiles y comerciales...
+					{:else if currentFuero === 'trabajo'}
+						Parseando registros históricos de tribunales de trabajo...
+					{:else}
+						Parseando registros históricos a nivel consolidado provincial...
+					{/if}
 				</p>
 			</div>
 		{:else if db.error}
@@ -138,32 +214,34 @@
 		class="border-t border-brand-border py-6 bg-stone-200/20 text-center text-[10px] text-brand-text-muted font-sans"
 	>
 		<div class="max-w-7xl mx-auto px-4">
-			<p>© 2026 - <a href="https://www.linkedin.com/in/jgjuara/" target="_blank" rel="noopener noreferrer" class="hover:underline text-brand-indigo font-medium">Juan Gabriel Juara</a> en base a datos de la SCBA</p>
+			<p>© 2026 - <a href="https://www.linkedin.com/in/jgjuara/" target="_blank" rel="noopener noreferrer" class="hover:underline text-brand-indigo font-medium">Juan Gabriel Juara</a> en base a datos de la <a href="https://www.scba.gov.ar/estadisticas.asp" target="_blank" rel="noopener noreferrer" class="hover:underline text-brand-indigo font-medium">SCBA</a></p>
 			<p class="mt-1">
 				Herramienta descriptiva y exploratoria de flujos procesales.
-				Fuente de datos: Parquet/CSV SCBA.
+				Fuente de datos: <a href="https://www.scba.gov.ar/estadisticas.asp" target="_blank" rel="noopener noreferrer" class="hover:underline text-brand-indigo font-medium">Parquet/CSV SCBA</a>.
 			</p>
 		</div>
 	</footer>
 
 	<!-- Mobile bottom navbar -->
-	<nav
-		class="md:hidden sticky bottom-0 z-40 bg-brand-bg/90 backdrop-blur-lg border-t border-brand-border py-2 px-4 flex justify-around"
-	>
-		{#each navItems as item}
-			{@const Icon = item.icon}
-			<a
-				href="{base}{item.path}"
-				class="flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition {isRouteActive(
-					item.path,
-					activePath,
-				)
-					? 'text-brand-indigo'
-					: 'text-brand-text-muted'}"
-			>
-				<Icon class="w-5 h-5" />
-				<span class="text-[9px] font-bold">{item.label}</span>
-			</a>
-		{/each}
-	</nav>
+	{#if currentFuero}
+		<nav
+			class="md:hidden sticky bottom-0 z-40 bg-brand-bg/90 backdrop-blur-lg border-t border-brand-border py-2 px-4 flex justify-around"
+		>
+			{#each navItems as item}
+				{@const Icon = item.icon}
+				<a
+					href="{base}{item.path}"
+					class="flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition {isRouteActive(
+						item.path,
+						activePath,
+					)
+						? 'text-brand-indigo'
+						: 'text-brand-text-muted'}"
+				>
+					<Icon class="w-5 h-5" />
+					<span class="text-[9px] font-bold">{item.label}</span>
+				</a>
+			{/each}
+		</nav>
+	{/if}
 </div>

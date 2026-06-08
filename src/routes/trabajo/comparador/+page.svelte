@@ -107,7 +107,7 @@
 <div class="space-y-8">
 	<!-- Top Bar -->
 	<div>
-		<h2 class="text-2xl font-bold text-brand-text tracking-tight">Comparador Simultáneo de Sedes</h2>
+		<h2 class="text-2xl font-bold text-brand-text tracking-tight">Comparador Simultáneo de Sedes - Trabajo</h2>
 		<p class="text-xs text-brand-text-muted mt-1">Selecciona hasta 6 sedes en la grilla para superponer y contrastar sus indicadores históricos.</p>
 	</div>
 

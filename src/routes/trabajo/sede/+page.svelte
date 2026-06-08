@@ -192,7 +192,7 @@
 				<Building2 class="w-6 h-6" />
 			</div>
 			<div>
-				<h2 class="text-2xl font-bold text-brand-text tracking-tight">Detalle por Sede Judicial</h2>
+				<h2 class="text-2xl font-bold text-brand-text tracking-tight">Detalle por Sede Judicial - Trabajo</h2>
 				<p class="text-xs text-brand-text-muted mt-1">
 					Historial y comparativa detallada de rendimiento procesal por sede.
 				</p>
